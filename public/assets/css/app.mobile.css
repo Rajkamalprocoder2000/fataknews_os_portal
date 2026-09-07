@@ -222,6 +222,26 @@
 
   /* ---------- article ---------- */
   .single-post-page .post-page { display: block; }
+
+  /* reorder so the cover image sits at the very top (mockup order) */
+  .single-post-page .post-main { display: flex; flex-direction: column; }
+  .single-post-page .post-main > * { order: 5; }
+  .single-post-page .post-cover,
+  .single-post-page .post-cover-fallback { order: 1; }
+  .single-post-page .post-header { order: 2; padding-top: 12px; }
+  .single-post-page .post-actions-bar { order: 3; }
+  .single-post-page .post-content { order: 4; }
+  .single-post-page .comments-section { order: 8; }
+
+  /* compact byline */
+  .single-post-page .post-meta-bar { flex-direction: column; align-items: flex-start; gap: 10px; margin-top: 14px; }
+  .single-post-page .post-author { display: flex; align-items: center; gap: 10px; }
+  .single-post-page .post-author-info span { display: none; }               /* hide @username line */
+  .single-post-page .post-author-info strong { font-size: 14px; }
+  .single-post-page .post-meta-extra {
+    display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--m-text-3);
+  }
+  .single-post-page .post-meta-extra span { display: inline-flex; align-items: center; gap: 5px; }
   .m-article-bar {
     position: sticky; top: 0; z-index: 900;
     display: flex; align-items: center; gap: 6px; padding: 0 8px; height: var(--m-topbar-h);
@@ -242,9 +262,10 @@
   .post-page .site-breadcrumb { display: none; }
   .post-page .post-meta-bar { flex-direction: column; align-items: flex-start; gap: 8px; margin-top: 12px; }
   .post-actions-bar {
-    position: sticky; bottom: calc(var(--m-bottomnav-h) + var(--m-safe-b)); z-index: 700;
-    display: flex; gap: 6px; padding: 10px 12px; margin: 0;
-    background: var(--m-surface); border-top: 1px solid var(--m-border);
+    position: static; z-index: 700;
+    display: flex; gap: 6px; padding: 12px; margin: 0;
+    background: var(--m-surface);
+    border-top: 1px solid var(--m-border); border-bottom: 1px solid var(--m-border);
   }
   .post-actions-bar .post-action-big {
     flex: 1; flex-direction: column; gap: 3px; font-size: 11px; padding: 4px 0;
@@ -358,6 +379,29 @@
   .category-page-hero, .page-hero { border-radius: var(--m-radius) !important; }
   .pagination { padding: 18px 14px calc(var(--m-bottomnav-h) + 24px); }
   .toast-container { bottom: calc(var(--m-bottomnav-h) + var(--m-safe-b) + 12px); }
+
+  /* ---------- auth pages (login / register / reset) ---------- */
+  .auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; background: var(--m-bg); }
+  .auth-card {
+    width: 100%; max-width: 420px; background: var(--m-surface);
+    border: 1px solid var(--m-border); border-radius: 20px; padding: 26px 20px;
+    box-shadow: var(--m-shadow);
+  }
+  .auth-card h1 { color: var(--m-text); }
+  .auth-card .form-control {
+    width: 100%; padding: 13px 14px; border-radius: 12px;
+    border: 1px solid var(--m-border); background: var(--m-surface-2); color: var(--m-text); font-size: 15px;
+  }
+  .auth-card .form-group { margin-bottom: 14px; }
+  .auth-card label { color: var(--m-text-2); font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px; }
+  .auth-card .btn-block {
+    width: 100%; padding: 14px; border-radius: 12px; border: 0; margin-top: 6px;
+    background: var(--m-accent); color: var(--m-accent-ink); font-size: 15px; font-weight: 700;
+  }
+  .auth-card .btn-ghost { background: var(--m-surface-2); border: 1px solid var(--m-border); color: var(--m-text); border-radius: 12px; }
+  .auth-divider { color: var(--m-text-3); font-size: 12px; text-align: center; margin: 16px 0; }
+  .auth-footer { text-align: center; font-size: 14px; color: var(--m-text-2); margin-top: 16px; }
+  .auth-footer a, .auth-card a { color: var(--m-accent); }
 
   /* mobile-only / desktop-only helpers
      NOTE: .m-only must NOT set `display` — components like .m-topbar / .m-bottomnav

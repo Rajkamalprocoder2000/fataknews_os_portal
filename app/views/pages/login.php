@@ -30,8 +30,10 @@ $canonicalUrl = Helper::siteUrl('login');
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="/public/assets/css/<?= $appCssFile ?>">
+<link rel="stylesheet" href="/public/assets/css/app.mobile.css">
+<script>(function(){try{var t=localStorage.getItem('fn-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 </head>
-<body>
+<body class="auth-mobile">
 <?= Helper::analyticsBodyOpenHtml() ?>
 <div class="auth-page">
   <div class="auth-card">
