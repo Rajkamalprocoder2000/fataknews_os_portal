@@ -12,9 +12,31 @@ $items = $db->fetchAll(
      ORDER BY b.created_at DESC",
     [Auth::id()]
 );
+$mBarTitle = 'Saved Articles';
 include VIEW . 'layouts/header.php';
 ?>
-<div class="home-grid">
+<div class="m-list m-only" style="padding-top:8px">
+  <?php foreach ($items as $post):
+    $pu = '/' . ($post['category_slug'] ?: 'news') . '/' . $post['slug'];
+  ?>
+  <a href="<?= $pu ?>" class="m-item">
+    <img class="m-item-thumb" src="<?= Helper::thumbnailUrl($post['thumbnail']) ?>" alt="<?= Helper::sanitize($post['title'] ?? '') ?>" loading="lazy" decoding="async">
+    <span class="m-item-body">
+      <?php if (!empty($post['category_name'])): ?><span class="m-kicker"><?= Helper::sanitize($post['category_name']) ?></span><?php endif; ?>
+      <h3><?= Helper::sanitize($post['title']) ?></h3>
+      <span class="m-meta">
+        <span><?= Helper::timeAgo($post['published_at'] ?? $post['created_at']) ?></span>
+        <span><i class="fa fa-eye"></i> <?= Helper::formatNumber((int)($post['views_count'] ?? 0)) ?></span>
+      </span>
+    </span>
+  </a>
+  <?php endforeach; ?>
+  <?php if (empty($items)): ?>
+  <div class="empty-state"><i class="fa fa-bookmark"></i><h3>No saved articles yet</h3><p>Tap the bookmark icon on any story to save it here.</p></div>
+  <?php endif; ?>
+</div>
+
+<div class="home-grid d-only">
   <main class="feed-col">
     <section class="sidebar-widget" style="margin-bottom:24px">
       <div class="widget-title"><i class="fa fa-bookmark"></i> Saved</div>

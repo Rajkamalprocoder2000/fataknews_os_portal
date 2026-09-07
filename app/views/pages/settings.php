@@ -2,8 +2,46 @@
 Auth::requireLogin();
 $user = Auth::user();
 $pageTitle = 'Settings - FatakNews';
+$mBarTitle = 'Settings';
 include VIEW . 'layouts/header.php';
 ?>
+<div class="m-settings m-only">
+  <div class="m-settings-group">
+    <h3>Account</h3>
+    <div class="m-settings-card">
+      <a href="#editProfile" class="m-settings-row"><i class="fa fa-user-pen"></i><span class="m-menu-label">Edit Profile</span><i class="fa fa-chevron-right"></i></a>
+      <a href="#editProfile" class="m-settings-row"><i class="fa fa-key"></i><span class="m-menu-label">Change Password</span><i class="fa fa-chevron-right"></i></a>
+      <a href="/@<?= $user['username'] ?>" class="m-settings-row"><i class="fa fa-shield-halved"></i><span class="m-menu-label">Public Profile</span><i class="fa fa-chevron-right"></i></a>
+    </div>
+  </div>
+
+  <div class="m-settings-group">
+    <h3>App Settings</h3>
+    <div class="m-settings-card">
+      <label class="m-settings-row"><i class="fa fa-bell"></i><span class="m-menu-label">Notifications</span>
+        <span class="m-switch"><input type="checkbox" id="mNotifPref" checked><span class="m-slider"></span></span>
+      </label>
+      <label class="m-settings-row"><i class="fa fa-moon"></i><span class="m-menu-label">Dark Mode</span>
+        <span class="m-switch"><input type="checkbox" data-theme-toggle><span class="m-slider"></span></span>
+      </label>
+      <div class="m-settings-row"><i class="fa fa-text-height"></i><span class="m-menu-label">Text Size</span><span class="m-menu-value">Medium</span></div>
+      <div class="m-settings-row"><i class="fa fa-wifi"></i><span class="m-menu-label">Data Usage</span><span class="m-menu-value">Wi-Fi &amp; Mobile</span></div>
+    </div>
+  </div>
+
+  <div class="m-settings-group">
+    <h3>Support</h3>
+    <div class="m-settings-card">
+      <a href="/contact" class="m-settings-row"><i class="fa fa-headset"></i><span class="m-menu-label">Help &amp; Support</span><i class="fa fa-chevron-right"></i></a>
+      <a href="/terms" class="m-settings-row"><i class="fa fa-file-lines"></i><span class="m-menu-label">Terms &amp; Conditions</span><i class="fa fa-chevron-right"></i></a>
+      <a href="/privacy" class="m-settings-row"><i class="fa fa-user-shield"></i><span class="m-menu-label">Privacy Policy</span><i class="fa fa-chevron-right"></i></a>
+    </div>
+  </div>
+
+  <a href="/logout" class="m-btn-logout">Log Out</a>
+  <div class="m-section-head" id="editProfile"><h2><i class="fa fa-user-pen"></i> Edit Profile</h2></div>
+</div>
+
 <div class="settings-page">
   <section class="sidebar-widget settings-hero">
     <div class="widget-title"><i class="fa fa-cog"></i> Account Settings</div>

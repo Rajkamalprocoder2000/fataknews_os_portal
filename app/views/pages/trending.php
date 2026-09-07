@@ -22,7 +22,35 @@ $structuredData = [
 $bodyClass = 'trending-page';
 include VIEW . 'layouts/header.php';
 ?>
-<div class="home-grid">
+<div class="m-segtabs m-only">
+  <a href="/trending" class="m-segtab active">Trending</a>
+  <a href="/feed" class="m-segtab">Latest</a>
+  <a href="/trending" class="m-segtab">Most Viewed</a>
+  <a href="/explore" class="m-segtab">Popular</a>
+</div>
+<div class="m-list m-only" style="padding-top:6px">
+  <?php foreach ($posts as $i => $post):
+    $pu = '/' . ($post['category_slug'] ?: 'news') . '/' . $post['slug'];
+  ?>
+  <a href="<?= $pu ?>" class="m-rankitem">
+    <span class="m-rank-num"><?= $i + 1 ?></span>
+    <img class="m-item-thumb" src="<?= Helper::thumbnailUrl($post['thumbnail']) ?>" alt="<?= Helper::sanitize($post['title'] ?? '') ?>" loading="<?= $i === 0 ? 'eager' : 'lazy' ?>" decoding="async">
+    <span class="m-item-body">
+      <?php if (!empty($post['category_name'])): ?><span class="m-kicker"><?= Helper::sanitize($post['category_name']) ?></span><?php endif; ?>
+      <h3><?= Helper::sanitize($post['title']) ?></h3>
+      <span class="m-meta">
+        <span><i class="fa fa-eye"></i> <?= Helper::formatNumber((int)($post['views_count'] ?? 0)) ?></span>
+        <span><?= Helper::timeAgo($post['published_at'] ?? $post['created_at']) ?></span>
+      </span>
+    </span>
+  </a>
+  <?php endforeach; ?>
+  <?php if (empty($posts)): ?>
+  <div class="empty-state"><i class="fa fa-fire"></i><h3>No trending stories yet</h3></div>
+  <?php endif; ?>
+</div>
+
+<div class="home-grid d-only">
   <main class="feed-col">
     <div style="background:#fffdfd;border:1px solid #e8e1f3;border-radius:28px;box-shadow:0 22px 54px rgba(53,45,88,.12),0 3px 14px rgba(53,45,88,.06);padding:24px 22px;overflow:hidden">
       <section class="sidebar-widget page-hero page-hero--trending" style="background:transparent;border:none;box-shadow:none;padding:0 0 18px;margin-bottom:18px;border-radius:0">

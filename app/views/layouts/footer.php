@@ -57,8 +57,65 @@
   </div>
 </footer>
 
+<!-- ===== MOBILE BOTTOM NAV ===== -->
+<?php
+$mNavPath = rtrim(Helper::requestPath(), '/') ?: '/';
+$mNavItems = [
+  ['/', 'fa-house', 'Home', ['/', '/feed']],
+  ['/shorts', 'fa-play-circle', 'Shorts', ['/shorts']],
+  ['/trending', 'fa-compass', 'Explore', ['/explore', '/trending', '/search', '/categories']],
+  ['/bookmarks', 'fa-bookmark', 'Saved', ['/bookmarks']],
+  [Auth::check() ? '/profile' : '/login', 'fa-user', 'Profile', ['/profile', '/settings', '/login', '/notifications']],
+];
+?>
+<nav class="m-bottomnav m-only" aria-label="Primary">
+  <?php foreach ($mNavItems as [$href, $icon, $label, $match]): ?>
+  <a href="<?= $href ?>" class="<?= in_array($mNavPath, $match, true) ? 'active' : '' ?>">
+    <i class="fa <?= $icon ?>"></i><span><?= $label ?></span>
+  </a>
+  <?php endforeach; ?>
+</nav>
+
 <!-- ===== TOAST CONTAINER ===== -->
 <div class="toast-container" id="toastContainer"></div>
+
+<script>
+(function () {
+  // splash: hide shortly after first load, remember for the session
+  var s = document.getElementById('mSplash');
+  if (s && !s.classList.contains('is-hidden')) {
+    setTimeout(function () {
+      s.classList.add('is-hidden');
+      try { sessionStorage.setItem('fn-splash-seen', '1'); } catch (e) {}
+    }, 1100);
+  }
+  // theme toggle: any element with [data-theme-toggle]
+  window.fnSetTheme = function (mode) {
+    var el = document.documentElement;
+    if (mode === 'dark') el.setAttribute('data-theme', 'dark');
+    else el.removeAttribute('data-theme');
+    try { localStorage.setItem('fn-theme', mode); } catch (e) {}
+    document.querySelectorAll('[data-theme-toggle]').forEach(function (t) {
+      if (t.type === 'checkbox') t.checked = (mode === 'dark');
+    });
+  };
+  var np = document.getElementById('mNotifPref');
+  if (np) {
+    try { np.checked = localStorage.getItem('fn-notif-pref') !== '0'; } catch (e) {}
+    np.addEventListener('change', function () {
+      try { localStorage.setItem('fn-notif-pref', this.checked ? '1' : '0'); } catch (e) {}
+    });
+  }
+  var current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  document.querySelectorAll('[data-theme-toggle]').forEach(function (t) {
+    if (t.type === 'checkbox') t.checked = (current === 'dark');
+    t.addEventListener('change', function () { window.fnSetTheme(this.checked ? 'dark' : 'light'); });
+    t.addEventListener('click', function (e) {
+      if (this.type !== 'checkbox') { e.preventDefault(); window.fnSetTheme(current === 'dark' ? 'light' : 'dark'); }
+    });
+  });
+})();
+</script>
 
 <!-- ===== SCRIPTS ===== -->
 <script>

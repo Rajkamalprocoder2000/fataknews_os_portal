@@ -207,6 +207,11 @@ foreach (array_slice($tags, 0, 8) as $tagMeta) {
 }
 $extraHead = implode("\n", $headFragments);
 $bodyClass = 'single-post-page';
+$mBarTitle = $post['category_name'] ?: 'News';
+$mBarActions = '<button type="button" class="m-iconbtn" aria-label="Share"'
+    . ' data-share-title="' . Helper::sanitize($post['title'] ?? 'FatakNews story') . '"'
+    . ' data-share-url="' . Helper::sanitize($canonicalUrl) . '"><i class="fa fa-share-alt"></i></button>'
+    . '<button type="button" class="m-iconbtn" aria-label="Save" data-bookmark="' . (int)$post['id'] . '"><i class="fa fa-bookmark"></i></button>';
 include VIEW . 'layouts/header.php';
 ?>
 <div class="post-page">

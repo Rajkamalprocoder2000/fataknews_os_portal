@@ -995,6 +995,13 @@ $routes = [
         '/corrections' => fn() => renderView(VIEW . 'pages/static_page.php', $staticPages['/corrections']),
         '/editorial-standards' => fn() => renderView(VIEW . 'pages/static_page.php', $staticPages['/editorial-standards']),
         '/team' => fn() => renderView(VIEW . 'pages/team.php'),
+        '/shorts' => fn() => renderView(VIEW . 'pages/placeholder.php', [
+            'pageTitle' => 'Shorts',
+            'message' => 'Short video news is coming soon to FatakNews.',
+            'placeholderIcon' => 'fa-play',
+            'metaRobots' => 'noindex,follow',
+        ]),
+        '/categories' => fn() => renderView(VIEW . 'pages/categories.php'),
         '/api/notifications' => fn() => include __DIR__ . '/../api/notifications.php',
         '/api/posts' => fn() => include __DIR__ . '/../api/posts.php',
         '/api/search' => fn() => include __DIR__ . '/../api/search.php',
