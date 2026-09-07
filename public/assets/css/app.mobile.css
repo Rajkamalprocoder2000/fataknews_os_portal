@@ -123,14 +123,16 @@
 
   /* ---------- category chips (horizontal) ---------- */
   .m-chips {
-    display: flex; gap: 8px; overflow-x: auto; padding: 10px 14px;
+    display: flex; flex-wrap: nowrap; align-items: center;
+    gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    padding: 10px 14px;
     background: var(--m-surface); border-bottom: 1px solid var(--m-border);
     scrollbar-width: none; position: sticky; top: var(--m-topbar-h); z-index: 800;
   }
   .m-chips::-webkit-scrollbar { display: none; }
   .m-chip {
     flex: 0 0 auto; padding: 7px 14px; border-radius: 999px;
-    font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap;
+    font-size: 13px; font-weight: 600; line-height: 1; text-decoration: none; white-space: nowrap;
     color: var(--m-text-2); background: var(--m-surface-2); border: 1px solid transparent;
   }
   .m-chip.active { background: var(--m-accent); color: var(--m-accent-ink); }
@@ -357,8 +359,10 @@
   .pagination { padding: 18px 14px calc(var(--m-bottomnav-h) + 24px); }
   .toast-container { bottom: calc(var(--m-bottomnav-h) + var(--m-safe-b) + 12px); }
 
-  /* mobile-only / desktop-only helpers */
-  .m-only { display: block; }
+  /* mobile-only / desktop-only helpers
+     NOTE: .m-only must NOT set `display` — components like .m-topbar / .m-bottomnav
+     / .m-chips carry their own display:flex and we must not override it. They are
+     visible by default at this breakpoint; the >=769px block hides them. */
   .d-only { display: none !important; }
   .m-screen-title { display: none; }
 }
