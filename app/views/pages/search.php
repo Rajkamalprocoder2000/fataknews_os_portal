@@ -34,9 +34,86 @@ $prevQuery = $q !== '' ? ['q' => $q] : [];
 $prevUrl = $page > 1 ? Helper::siteUrl('search' . '?' . http_build_query($prevQuery + ($page > 2 ? ['page' => $page - 1] : []))) : null;
 $nextUrl = $page < (int)($results['pages'] ?? 1) ? Helper::siteUrl('search' . '?' . http_build_query(($q !== '' ? ['q' => $q] : []) + ['page' => $page + 1])) : null;
 $bodyClass = 'search-page';
+$mBarTitle = 'Search';
+$mTrendingSearches = Helper::cacheRemember('m_trending_searches_v1', 600, static function () use ($db): array {
+    return $db->fetchAll(
+        "SELECT t.name FROM tags t
+         JOIN post_tags pt ON pt.tag_id=t.id
+         JOIN posts p ON p.id=pt.post_id AND p.status='published'
+         GROUP BY t.id ORDER BY COUNT(*) DESC, MAX(p.published_at) DESC LIMIT 10"
+    );
+});
 include VIEW . 'layouts/header.php';
 ?>
-<div class="home-grid">
+<div class="m-only m-searchscreen">
+  <form action="/search" method="get" class="m-searchbar">
+    <i class="fa fa-magnifying-glass"></i>
+    <input type="text" name="q" value="<?= Helper::sanitize($q) ?>" placeholder="Search news, topics or keywords..." autocomplete="off" <?= $q === '' ? 'autofocus' : '' ?>>
+    <?php if ($q !== ''): ?><a href="/search" class="m-searchbar-clear" aria-label="Clear"><i class="fa fa-xmark"></i></a><?php endif; ?>
+  </form>
+
+  <?php if ($q === ''): ?>
+  <?php if (!empty($mTrendingSearches)): ?>
+  <div class="m-section-head"><h2><i class="fa fa-arrow-trend-up"></i> Trending Searches</h2></div>
+  <div class="m-searchtags">
+    <?php foreach ($mTrendingSearches as $ts): ?>
+    <a href="/search?q=<?= urlencode($ts['name']) ?>" class="m-chip"><?= Helper::sanitize($ts['name']) ?></a>
+    <?php endforeach; ?>
+  </div>
+  <?php endif; ?>
+  <div class="m-section-head" id="mRecentHead" hidden><h2><i class="fa fa-clock-rotate-left"></i> Recent Searches</h2><a href="#" id="mRecentClear">Clear</a></div>
+  <div class="m-searchtags" id="mRecentTags"></div>
+  <script>
+  (function(){
+    try{
+      var r=JSON.parse(localStorage.getItem('fn-recent-search')||'[]');
+      if(r.length){
+        document.getElementById('mRecentHead').hidden=false;
+        document.getElementById('mRecentTags').innerHTML=r.slice(0,8).map(function(q){
+          return '<a class="m-chip" href="/search?q='+encodeURIComponent(q)+'">'+q.replace(/[<>&]/g,'')+'</a>';
+        }).join('');
+      }
+      document.getElementById('mRecentClear').addEventListener('click',function(e){
+        e.preventDefault();localStorage.removeItem('fn-recent-search');location.reload();
+      });
+    }catch(e){}
+  })();
+  </script>
+  <?php else: ?>
+  <script>try{var q=<?= json_encode($q) ?>;var r=JSON.parse(localStorage.getItem('fn-recent-search')||'[]');r=[q].concat(r.filter(function(x){return x!==q;})).slice(0,10);localStorage.setItem('fn-recent-search',JSON.stringify(r));}catch(e){}</script>
+  <?php if (!empty($users)): ?>
+  <div class="m-section-head"><h2><i class="fa fa-user"></i> People</h2></div>
+  <div class="m-list">
+    <?php foreach ($users as $u): ?>
+    <a href="/@<?= $u['username'] ?>" class="m-item" style="align-items:center">
+      <img class="m-item-thumb" style="width:44px;height:44px;border-radius:50%" src="<?= Helper::avatarUrl($u['avatar']) ?>" alt="">
+      <span class="m-item-body"><h3 style="-webkit-line-clamp:1"><?= Helper::sanitize($u['full_name']) ?></h3><span class="m-meta">@<?= Helper::sanitize($u['username']) ?></span></span>
+    </a>
+    <?php endforeach; ?>
+  </div>
+  <?php endif; ?>
+  <div class="m-section-head"><h2><i class="fa fa-newspaper"></i> Results</h2></div>
+  <div class="m-list">
+    <?php foreach ($results['data'] as $post):
+      $pu = '/' . ($post['category_slug'] ?: 'news') . '/' . $post['slug'];
+    ?>
+    <a href="<?= $pu ?>" class="m-item">
+      <img class="m-item-thumb" src="<?= Helper::thumbnailUrl($post['thumbnail']) ?>" alt="<?= Helper::sanitize($post['title'] ?? '') ?>" loading="lazy" decoding="async">
+      <span class="m-item-body">
+        <?php if (!empty($post['category_name'])): ?><span class="m-kicker"><?= Helper::sanitize($post['category_name']) ?></span><?php endif; ?>
+        <h3><?= Helper::sanitize($post['title']) ?></h3>
+        <span class="m-meta"><span><?= Helper::timeAgo($post['published_at'] ?? $post['created_at']) ?></span><span><i class="fa fa-eye"></i> <?= Helper::formatNumber((int)($post['views_count'] ?? 0)) ?></span></span>
+      </span>
+    </a>
+    <?php endforeach; ?>
+    <?php if (empty($results['data']) && empty($users)): ?>
+    <div class="empty-state"><i class="fa fa-magnifying-glass"></i><h3>No results for "<?= Helper::sanitize($q) ?>"</h3><p>Try broader keywords or check spelling.</p></div>
+    <?php endif; ?>
+  </div>
+  <?php endif; ?>
+</div>
+
+<div class="home-grid d-only">
   <main class="feed-col">
     <section class="sidebar-widget" style="margin-bottom:24px">
       <div class="widget-title"><i class="fa fa-magnifying-glass"></i> Search</div>

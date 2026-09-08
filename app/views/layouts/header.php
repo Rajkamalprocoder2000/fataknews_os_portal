@@ -76,8 +76,9 @@ $tickerBreaking = $tickerBreaking ?? Helper::cacheRemember('layout_breaking_tick
 <meta name="twitter:image:alt" content="<?= Helper::sanitize($metaTitle) ?>">
 <meta name="application-name" content="FatakNews">
 <meta name="apple-mobile-web-app-title" content="FatakNews">
-<meta name="theme-color" content="#FF2D2D">
-<meta name="msapplication-TileColor" content="#FF2D2D">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+<meta name="msapplication-TileColor" content="#E41E26">
 <link rel="icon" href="<?= Helper::sanitize(Helper::siteUrl('favicon.ico')) ?>" sizes="any">
 <link rel="shortcut icon" href="<?= Helper::sanitize(Helper::siteUrl('favicon.ico')) ?>">
 <link rel="icon" type="image/png" sizes="48x48" href="<?= Helper::sanitize(Helper::siteUrl('favicon-48x48.png')) ?>">
@@ -91,9 +92,9 @@ $tickerBreaking = $tickerBreaking ?? Helper::cacheRemember('layout_breaking_tick
 <link rel="dns-prefetch" href="//fonts.googleapis.com">
 <link rel="dns-prefetch" href="//fonts.gstatic.com">
 <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
 <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous"></noscript>
 <link rel="stylesheet" href="/public/assets/css/<?= $appCssFile ?>?v=<?= $appCssVersion ?>">
 <?php $appMobileCssVersion = @filemtime(BASE_PATH . '/public/assets/css/app.mobile.css') ?: time(); ?>
