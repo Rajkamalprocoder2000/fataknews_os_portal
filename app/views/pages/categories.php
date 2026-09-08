@@ -26,11 +26,11 @@ include VIEW . 'layouts/header.php';
       <strong><?= Helper::sanitize($cat['name']) ?></strong>
       <span><?= Helper::sanitize($cat['description'] ?: 'Latest ' . $cat['name'] . ' news and updates') ?></span>
     </span>
-    <i class="fa fa-chevron-right"></i>
+    <i data-lucide="chevron-right"></i>
   </a>
   <?php endforeach; ?>
   <?php if (empty($cats)): ?>
-  <div class="empty-state"><i class="fa fa-folder-open"></i><h3>No categories yet</h3></div>
+  <div class="empty-state"><i data-lucide="folder-open"></i><h3>No categories yet</h3></div>
   <?php endif; ?>
 </div>
 <?php include VIEW . 'layouts/footer.php'; ?>

@@ -96,6 +96,7 @@ $tickerBreaking = $tickerBreaking ?? Helper::cacheRemember('layout_breaking_tick
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
 <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous"></noscript>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.462.0/lucide.min.js"></script>
 <link rel="stylesheet" href="/public/assets/css/<?= $appCssFile ?>?v=<?= $appCssVersion ?>">
 <?php $appMobileCssVersion = @filemtime(BASE_PATH . '/public/assets/css/app.mobile.css') ?: time(); ?>
 <link rel="stylesheet" href="/public/assets/css/app.mobile.css?v=<?= $appMobileCssVersion ?>">
@@ -135,23 +136,23 @@ if (!$mHideTopBar):
     <img src="<?= $mLogo ?>" alt="FatakNews">
     <span><b>Fatak<span>News</span></b><small>News That Matters</small></span>
   </a>
-  <a href="/search" class="m-iconbtn" aria-label="Search"><i class="fa fa-search"></i></a>
+  <a href="/search" class="m-iconbtn" aria-label="Search"><i data-lucide="search"></i></a>
   <?php if (Auth::check()): ?>
   <a href="/notifications" class="m-iconbtn" aria-label="Notifications">
-    <i class="fa fa-bell"></i>
+    <i data-lucide="bell"></i>
     <?php $mNotif = (new NotificationModel())->countUnread((int)Auth::id()); if ($mNotif > 0): ?>
     <span class="m-dot"><?= $mNotif > 9 ? '9+' : $mNotif ?></span>
     <?php endif; ?>
   </a>
   <?php else: ?>
-  <a href="/login" class="m-iconbtn" aria-label="Login"><i class="fa fa-user"></i></a>
+  <a href="/login" class="m-iconbtn" aria-label="Login"><i data-lucide="user"></i></a>
   <?php endif; ?>
 </header>
 <?php else: ?>
 <header class="m-topbar m-only">
-  <a href="<?= Helper::sanitize($mBarBack) ?>" class="m-iconbtn" aria-label="Back"><i class="fa fa-arrow-left"></i></a>
+  <a href="<?= Helper::sanitize($mBarBack) ?>" class="m-iconbtn" aria-label="Back"><i data-lucide="arrow-left"></i></a>
   <span class="m-topbar-title"><?= Helper::sanitize($mBarTitle) ?></span>
-  <?= $mBarActions ?? '<a href="/search" class="m-iconbtn" aria-label="Search"><i class="fa fa-search"></i></a>' ?>
+  <?= $mBarActions ?? '<a href="/search" class="m-iconbtn" aria-label="Search"><i data-lucide="search"></i></a>' ?>
 </header>
 <?php endif; ?>
 <?php endif; ?>

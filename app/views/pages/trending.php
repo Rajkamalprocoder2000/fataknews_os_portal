@@ -39,14 +39,14 @@ include VIEW . 'layouts/header.php';
       <?php if (!empty($post['category_name'])): ?><span class="m-kicker"><?= Helper::sanitize($post['category_name']) ?></span><?php endif; ?>
       <h3><?= Helper::sanitize($post['title']) ?></h3>
       <span class="m-meta">
-        <span><i class="fa fa-eye"></i> <?= Helper::formatNumber((int)($post['views_count'] ?? 0)) ?></span>
+        <span><i data-lucide="eye"></i> <?= Helper::formatNumber((int)($post['views_count'] ?? 0)) ?></span>
         <span><?= Helper::timeAgo($post['published_at'] ?? $post['created_at']) ?></span>
       </span>
     </span>
   </a>
   <?php endforeach; ?>
   <?php if (empty($posts)): ?>
-  <div class="empty-state"><i class="fa fa-fire"></i><h3>No trending stories yet</h3></div>
+  <div class="empty-state"><i data-lucide="flame"></i><h3>No trending stories yet</h3></div>
   <?php endif; ?>
 </div>
 

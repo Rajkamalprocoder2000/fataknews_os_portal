@@ -47,21 +47,21 @@ include VIEW . 'layouts/header.php';
 ?>
 <div class="m-only m-searchscreen">
   <form action="/search" method="get" class="m-searchbar">
-    <i class="fa fa-magnifying-glass"></i>
+    <i data-lucide="search"></i>
     <input type="text" name="q" value="<?= Helper::sanitize($q) ?>" placeholder="Search news, topics or keywords..." autocomplete="off" <?= $q === '' ? 'autofocus' : '' ?>>
-    <?php if ($q !== ''): ?><a href="/search" class="m-searchbar-clear" aria-label="Clear"><i class="fa fa-xmark"></i></a><?php endif; ?>
+    <?php if ($q !== ''): ?><a href="/search" class="m-searchbar-clear" aria-label="Clear"><i data-lucide="x"></i></a><?php endif; ?>
   </form>
 
   <?php if ($q === ''): ?>
   <?php if (!empty($mTrendingSearches)): ?>
-  <div class="m-section-head"><h2><i class="fa fa-arrow-trend-up"></i> Trending Searches</h2></div>
+  <div class="m-section-head"><h2><i data-lucide="trending-up"></i> Trending Searches</h2></div>
   <div class="m-searchtags">
     <?php foreach ($mTrendingSearches as $ts): ?>
     <a href="/search?q=<?= urlencode($ts['name']) ?>" class="m-chip"><?= Helper::sanitize($ts['name']) ?></a>
     <?php endforeach; ?>
   </div>
   <?php endif; ?>
-  <div class="m-section-head" id="mRecentHead" hidden><h2><i class="fa fa-clock-rotate-left"></i> Recent Searches</h2><a href="#" id="mRecentClear">Clear</a></div>
+  <div class="m-section-head" id="mRecentHead" hidden><h2><i data-lucide="history"></i> Recent Searches</h2><a href="#" id="mRecentClear">Clear</a></div>
   <div class="m-searchtags" id="mRecentTags"></div>
   <script>
   (function(){
@@ -82,7 +82,7 @@ include VIEW . 'layouts/header.php';
   <?php else: ?>
   <script>try{var q=<?= json_encode($q) ?>;var r=JSON.parse(localStorage.getItem('fn-recent-search')||'[]');r=[q].concat(r.filter(function(x){return x!==q;})).slice(0,10);localStorage.setItem('fn-recent-search',JSON.stringify(r));}catch(e){}</script>
   <?php if (!empty($users)): ?>
-  <div class="m-section-head"><h2><i class="fa fa-user"></i> People</h2></div>
+  <div class="m-section-head"><h2><i data-lucide="user"></i> People</h2></div>
   <div class="m-list">
     <?php foreach ($users as $u): ?>
     <a href="/@<?= $u['username'] ?>" class="m-item" style="align-items:center">
@@ -92,7 +92,7 @@ include VIEW . 'layouts/header.php';
     <?php endforeach; ?>
   </div>
   <?php endif; ?>
-  <div class="m-section-head"><h2><i class="fa fa-newspaper"></i> Results</h2></div>
+  <div class="m-section-head"><h2><i data-lucide="newspaper"></i> Results</h2></div>
   <div class="m-list">
     <?php foreach ($results['data'] as $post):
       $pu = '/' . ($post['category_slug'] ?: 'news') . '/' . $post['slug'];
@@ -102,12 +102,12 @@ include VIEW . 'layouts/header.php';
       <span class="m-item-body">
         <?php if (!empty($post['category_name'])): ?><span class="m-kicker"><?= Helper::sanitize($post['category_name']) ?></span><?php endif; ?>
         <h3><?= Helper::sanitize($post['title']) ?></h3>
-        <span class="m-meta"><span><?= Helper::timeAgo($post['published_at'] ?? $post['created_at']) ?></span><span><i class="fa fa-eye"></i> <?= Helper::formatNumber((int)($post['views_count'] ?? 0)) ?></span></span>
+        <span class="m-meta"><span><?= Helper::timeAgo($post['published_at'] ?? $post['created_at']) ?></span><span><i data-lucide="eye"></i> <?= Helper::formatNumber((int)($post['views_count'] ?? 0)) ?></span></span>
       </span>
     </a>
     <?php endforeach; ?>
     <?php if (empty($results['data']) && empty($users)): ?>
-    <div class="empty-state"><i class="fa fa-magnifying-glass"></i><h3>No results for "<?= Helper::sanitize($q) ?>"</h3><p>Try broader keywords or check spelling.</p></div>
+    <div class="empty-state"><i data-lucide="search"></i><h3>No results for "<?= Helper::sanitize($q) ?>"</h3><p>Try broader keywords or check spelling.</p></div>
     <?php endif; ?>
   </div>
   <?php endif; ?>

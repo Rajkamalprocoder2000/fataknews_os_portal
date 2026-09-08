@@ -31,9 +31,43 @@ $structuredData = [
     Helper::collectionItemListSchema($posts['data'] ?? [], $canonicalUrl),
 ];
 $bodyClass = 'category-page';
+$mBarTitle = $category['name'];
+$mBarActions = '<a href="/search" class="m-iconbtn" aria-label="Search"><i data-lucide="search"></i></a>';
 include VIEW . 'layouts/header.php';
 ?>
-<div class="home-grid">
+<div class="m-only">
+  <?php if (!empty($children)): ?>
+  <div class="m-chips">
+    <a href="/category/<?= $category['slug'] ?>" class="m-chip active">All</a>
+    <?php foreach ($children as $child): ?>
+    <a href="/category/<?= $child['slug'] ?>" class="m-chip"><?= Helper::sanitize($child['name']) ?></a>
+    <?php endforeach; ?>
+  </div>
+  <?php endif; ?>
+  <div class="m-list" style="padding-top:8px">
+    <?php foreach ($posts['data'] as $mi => $post):
+      $mpu = '/' . ($post['category_slug'] ?: 'news') . '/' . $post['slug'];
+    ?>
+    <a href="<?= $mpu ?>" class="m-item">
+      <img class="m-item-thumb" src="<?= Helper::thumbnailUrl($post['thumbnail']) ?>" alt="<?= Helper::sanitize(Helper::imageAlt($post['image_alt'] ?? '', $post['title'] ?? '')) ?>" loading="<?= $mi === 0 ? 'eager' : 'lazy' ?>" decoding="async">
+      <span class="m-item-body">
+        <span class="m-kicker"><?= Helper::sanitize($category['name']) ?></span>
+        <h3><?= Helper::sanitize($post['title']) ?></h3>
+        <span class="m-meta">
+          <span><?= Helper::timeAgo($post['published_at'] ?? $post['created_at']) ?></span>
+          <span><i data-lucide="eye"></i> <?= Helper::formatNumber((int)($post['views_count'] ?? 0)) ?></span>
+        </span>
+      </span>
+    </a>
+    <?php endforeach; ?>
+    <?php if (empty($posts['data'])): ?>
+    <div class="empty-state"><i data-lucide="folder-open"></i><h3>No posts in <?= Helper::sanitize($category['name']) ?> yet</h3></div>
+    <?php endif; ?>
+  </div>
+  <?= Helper::paginationNav((int)($posts['page'] ?? $page), (int)($posts['pages'] ?? 1), '/category/' . $category['slug']) ?>
+</div>
+
+<div class="home-grid d-only">
   <main class="feed-col">
     <section class="sidebar-widget category-page-hero" style="--category-accent:<?= Helper::sanitize($category['color']) ?>;margin-bottom:24px">
       <?= Helper::breadcrumbNav($breadcrumbItems) ?>

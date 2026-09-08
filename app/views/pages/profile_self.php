@@ -14,27 +14,27 @@ include VIEW . 'layouts/header.php';
     <?php if (Helper::avatarAssetUrl($user['avatar'] ?? null)): ?>
     <img src="<?= Helper::avatarUrl($user['avatar']) ?>" alt="<?= Helper::sanitize($user['full_name']) ?>">
     <?php else: ?>
-    <span class="m-avatar-fallback"><i class="fa fa-user"></i></span>
+    <span class="m-avatar-fallback"><i data-lucide="user"></i></span>
     <?php endif; ?>
     <span class="m-profile-id">
       <b><?= Helper::sanitize($user['full_name'] ?: ('@' . $user['username'])) ?></b>
       <span><?= Helper::sanitize($user['email'] ?: ('@' . $user['username'])) ?></span>
     </span>
-    <a href="/settings" class="m-iconbtn" aria-label="Settings"><i class="fa fa-gear"></i></a>
+    <a href="/settings" class="m-iconbtn" aria-label="Settings"><i data-lucide="settings"></i></a>
   </div>
 
   <div class="m-menu">
-    <a href="/@<?= $user['username'] ?>" class="m-menu-item"><i class="fa fa-id-badge"></i><span class="m-menu-label">Public Profile<small>How readers see you</small></span><i class="fa fa-chevron-right"></i></a>
-    <a href="/settings" class="m-menu-item"><i class="fa fa-sliders"></i><span class="m-menu-label">My Interests<small>Customise your news feed</small></span><i class="fa fa-chevron-right"></i></a>
-    <a href="/bookmarks" class="m-menu-item"><i class="fa fa-bookmark"></i><span class="m-menu-label">Saved Articles<small>Your reading list</small></span><i class="fa fa-chevron-right"></i></a>
-    <a href="/notifications" class="m-menu-item"><i class="fa fa-bell"></i><span class="m-menu-label">Notifications<small>Alerts &amp; updates</small></span><?php if ($mUnread > 0): ?><span class="m-dot"><?= $mUnread > 9 ? '9+' : $mUnread ?></span><?php endif; ?><i class="fa fa-chevron-right"></i></a>
-    <button type="button" class="m-menu-item" data-theme-toggle><i class="fa fa-moon"></i><span class="m-menu-label">Dark Mode<small>Switch light / dark theme</small></span><span class="m-switch" style="pointer-events:none"><span class="m-slider"></span></span></button>
-    <a href="/editorial-standards" class="m-menu-item"><i class="fa fa-circle-info"></i><span class="m-menu-label">About FatakNews<small>Version 1.0.0</small></span><i class="fa fa-chevron-right"></i></a>
-    <a href="/contact" class="m-menu-item"><i class="fa fa-headset"></i><span class="m-menu-label">Help &amp; Support<small>Get help or contact us</small></span><i class="fa fa-chevron-right"></i></a>
+    <a href="/@<?= $user['username'] ?>" class="m-menu-item"><i data-lucide="id-card"></i><span class="m-menu-label">Public Profile<small>How readers see you</small></span><i data-lucide="chevron-right"></i></a>
+    <a href="/settings" class="m-menu-item"><i data-lucide="sliders-horizontal"></i><span class="m-menu-label">My Interests<small>Customise your news feed</small></span><i data-lucide="chevron-right"></i></a>
+    <a href="/bookmarks" class="m-menu-item"><i data-lucide="bookmark"></i><span class="m-menu-label">Saved Articles<small>Your reading list</small></span><i data-lucide="chevron-right"></i></a>
+    <a href="/notifications" class="m-menu-item"><i data-lucide="bell"></i><span class="m-menu-label">Notifications<small>Alerts &amp; updates</small></span><?php if ($mUnread > 0): ?><span class="m-dot"><?= $mUnread > 9 ? '9+' : $mUnread ?></span><?php endif; ?><i data-lucide="chevron-right"></i></a>
+    <button type="button" class="m-menu-item" data-theme-toggle><i data-lucide="moon"></i><span class="m-menu-label">Dark Mode<small>Switch light / dark theme</small></span><span class="m-switch" style="pointer-events:none"><span class="m-slider"></span></span></button>
+    <a href="/editorial-standards" class="m-menu-item"><i data-lucide="info"></i><span class="m-menu-label">About FatakNews<small>Version 1.0.0</small></span><i data-lucide="chevron-right"></i></a>
+    <a href="/contact" class="m-menu-item"><i data-lucide="headphones"></i><span class="m-menu-label">Help &amp; Support<small>Get help or contact us</small></span><i data-lucide="chevron-right"></i></a>
   </div>
   <a href="/logout" class="m-btn-logout">Log Out</a>
 
-  <div class="m-section-head"><h2><i class="fa fa-newspaper"></i> Your Posts</h2></div>
+  <div class="m-section-head"><h2><i data-lucide="newspaper"></i> Your Posts</h2></div>
   <div class="m-list">
     <?php foreach (($posts['data'] ?? []) as $post):
       $pu = '/' . ($post['category_slug'] ?: 'news') . '/' . $post['slug'];
@@ -49,7 +49,7 @@ include VIEW . 'layouts/header.php';
     </a>
     <?php endforeach; ?>
     <?php if (empty($posts['data'])): ?>
-    <div class="empty-state"><i class="fa fa-user-pen"></i><h3>No posts yet</h3></div>
+    <div class="empty-state"><i data-lucide="square-pen"></i><h3>No posts yet</h3></div>
     <?php endif; ?>
   </div>
 </div>

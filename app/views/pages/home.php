@@ -226,7 +226,7 @@ $mTrending = array_slice($trending ?? [], 0, 6);
   <?php foreach ($mChips as $c): ?>
   <a href="/category/<?= $c['slug'] ?>" class="m-chip"><?= Helper::sanitize($c['name']) ?></a>
   <?php endforeach; ?>
-  <a href="/categories" class="m-chip" aria-label="All categories"><i class="fa fa-bars"></i></a>
+  <a href="/categories" class="m-chip" aria-label="All categories"><i data-lucide="menu"></i></a>
 </div>
 
 <?php if ($mLead):
@@ -240,15 +240,15 @@ $mTrending = array_slice($trending ?? [], 0, 6);
   <span class="m-hero-body">
     <h3><?= Helper::sanitize($mLead['title']) ?></h3>
     <span class="m-meta">
-      <span><i class="fa fa-clock"></i> <?= Helper::timeAgo($mLead['published_at'] ?? $mLead['created_at']) ?></span>
-      <span><i class="fa fa-eye"></i> <?= Helper::formatNumber((int)($mLead['views_count'] ?? 0)) ?> views</span>
+      <span><i data-lucide="clock"></i> <?= Helper::timeAgo($mLead['published_at'] ?? $mLead['created_at']) ?></span>
+      <span><i data-lucide="eye"></i> <?= Helper::formatNumber((int)($mLead['views_count'] ?? 0)) ?> views</span>
     </span>
   </span>
 </a>
 <?php endif; ?>
 
 <div class="m-only">
-  <div class="m-section-head"><h2><i class="fa fa-bolt"></i> Top Stories</h2><a href="/feed">See all</a></div>
+  <div class="m-section-head"><h2><i data-lucide="zap"></i> Top Stories</h2><a href="/feed">See all</a></div>
   <div class="m-list">
     <?php foreach ($mFeedRest as $post):
       $pu = '/' . ($post['category_slug'] ?: 'news') . '/' . $post['slug'];
@@ -260,7 +260,7 @@ $mTrending = array_slice($trending ?? [], 0, 6);
         <h3><?= Helper::sanitize($post['title']) ?></h3>
         <span class="m-meta">
           <span><?= Helper::timeAgo($post['published_at'] ?? $post['created_at']) ?></span>
-          <span><i class="fa fa-eye"></i> <?= Helper::formatNumber((int)($post['views_count'] ?? 0)) ?></span>
+          <span><i data-lucide="eye"></i> <?= Helper::formatNumber((int)($post['views_count'] ?? 0)) ?></span>
         </span>
       </span>
     </a>
@@ -271,7 +271,7 @@ $mTrending = array_slice($trending ?? [], 0, 6);
   </div>
 
   <?php if (!empty($mTrending)): ?>
-  <div class="m-section-head"><h2><i class="fa fa-fire"></i> Trending</h2><a href="/trending">See all</a></div>
+  <div class="m-section-head"><h2><i data-lucide="flame"></i> Trending</h2><a href="/trending">See all</a></div>
   <div class="m-list">
     <?php foreach ($mTrending as $i => $post):
       $pu = '/' . ($post['category_slug'] ?: 'news') . '/' . $post['slug'];
@@ -283,7 +283,7 @@ $mTrending = array_slice($trending ?? [], 0, 6);
         <?php if (!empty($post['category_name'])): ?><span class="m-kicker"><?= Helper::sanitize($post['category_name']) ?></span><?php endif; ?>
         <h3><?= Helper::sanitize($post['title']) ?></h3>
         <span class="m-meta">
-          <span><i class="fa fa-eye"></i> <?= Helper::formatNumber((int)($post['views_count'] ?? 0)) ?></span>
+          <span><i data-lucide="eye"></i> <?= Helper::formatNumber((int)($post['views_count'] ?? 0)) ?></span>
           <span><?= Helper::timeAgo($post['published_at'] ?? $post['created_at']) ?></span>
         </span>
       </span>

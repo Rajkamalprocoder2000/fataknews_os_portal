@@ -26,13 +26,13 @@ include VIEW . 'layouts/header.php';
       <h3><?= Helper::sanitize($post['title']) ?></h3>
       <span class="m-meta">
         <span><?= Helper::timeAgo($post['published_at'] ?? $post['created_at']) ?></span>
-        <span><i class="fa fa-eye"></i> <?= Helper::formatNumber((int)($post['views_count'] ?? 0)) ?></span>
+        <span><i data-lucide="eye"></i> <?= Helper::formatNumber((int)($post['views_count'] ?? 0)) ?></span>
       </span>
     </span>
   </a>
   <?php endforeach; ?>
   <?php if (empty($items)): ?>
-  <div class="empty-state"><i class="fa fa-bookmark"></i><h3>No saved articles yet</h3><p>Tap the bookmark icon on any story to save it here.</p></div>
+  <div class="empty-state"><i data-lucide="bookmark"></i><h3>No saved articles yet</h3><p>Tap the bookmark icon on any story to save it here.</p></div>
   <?php endif; ?>
 </div>
 

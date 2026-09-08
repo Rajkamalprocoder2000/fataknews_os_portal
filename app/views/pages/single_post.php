@@ -210,8 +210,9 @@ $bodyClass = 'single-post-page';
 $mBarTitle = $post['category_name'] ?: 'News';
 $mBarActions = '<button type="button" class="m-iconbtn" aria-label="Share"'
     . ' data-share-title="' . Helper::sanitize($post['title'] ?? 'FatakNews story') . '"'
-    . ' data-share-url="' . Helper::sanitize($canonicalUrl) . '"><i class="fa fa-share-alt"></i></button>'
-    . '<button type="button" class="m-iconbtn" aria-label="Save" data-bookmark="' . (int)$post['id'] . '"><i class="fa fa-bookmark"></i></button>';
+    . ' data-share-url="' . Helper::sanitize($canonicalUrl) . '"><i data-lucide="share-2"></i></button>'
+    . '<button type="button" class="m-iconbtn" aria-label="Save" data-bookmark="' . (int)$post['id'] . '"><i data-lucide="bookmark"></i></button>'
+    . '<button type="button" class="m-iconbtn" aria-label="More"><i data-lucide="more-vertical"></i></button>';
 include VIEW . 'layouts/header.php';
 ?>
 <div class="post-page">
@@ -223,6 +224,12 @@ include VIEW . 'layouts/header.php';
       <?php endif; ?>
       <h1 class="post-title"><?= Helper::sanitize($post['title']) ?></h1>
       <p class="post-excerpt"><?= Helper::sanitize($post['excerpt'] ?: Helper::excerpt($post['content'], 220)) ?></p>
+      <div class="m-byline m-only">
+        <img src="<?= Helper::avatarUrl($post['avatar']) ?>" alt="" width="28" height="28" decoding="async">
+        <span><a href="/@<?= $post['username'] ?>"><?= Helper::sanitize($post['full_name'] ?: 'FatakNews Desk') ?></a></span>
+        <i>·</i> <?= Helper::timeAgo($post['published_at'] ?? $post['created_at']) ?>
+        <i>·</i> <?= Helper::formatNumber((int)$post['views_count']) ?> views
+      </div>
       <div class="post-meta-bar">
         <div class="post-author">
           <img src="<?= Helper::avatarUrl($post['avatar']) ?>" alt="<?= Helper::sanitize($post['full_name'] ?: 'Author') ?>" class="post-author-img" width="44" height="44" decoding="async">
@@ -285,7 +292,7 @@ include VIEW . 'layouts/header.php';
         <span class="author-card-kicker">Written by</span>
         <strong class="author-card-name">
           <a href="/@<?= $post['username'] ?>"><?= Helper::sanitize($post['full_name'] ?: ('@' . $post['username'])) ?></a>
-          <?php if (!empty($post['is_verified'])): ?><i class="fa fa-check-circle verified-icon" title="Verified"></i><?php endif; ?>
+          <?php if (!empty($post['is_verified'])): ?><i data-lucide="badge-check" class="verified-icon" title="Verified"></i><?php endif; ?>
         </strong>
         <span class="author-card-meta">
           <?= Helper::sanitize($authorRole ?: 'Contributor') ?><?php if ($authorLoc !== ''): ?> &middot; <?= Helper::sanitize($authorLoc) ?><?php endif; ?>
@@ -304,16 +311,16 @@ include VIEW . 'layouts/header.php';
     </section>
 
     <div class="post-actions-bar">
-     <button type="button" class="post-action-big" data-react="<?= $post['id'] ?>" data-type="like" aria-label="Like article"><i class="fa fa-heart"></i><span class="react-count"><?= Helper::formatNumber((int)$post['likes_count']) ?></span></button>
-      <button type="button" class="post-action-big" data-bookmark="<?= $post['id'] ?>" aria-label="Save article"><i class="fa fa-bookmark"></i> Save</button>
-      <a class="post-action-big" href="#comments" aria-label="Go to comments"><i class="fa fa-comment"></i> Comment</a>
+      <button type="button" class="post-action-big" data-react="<?= $post['id'] ?>" data-type="like" aria-label="Like article"><i data-lucide="heart"></i><span class="react-count"><?= Helper::formatNumber((int)$post['likes_count']) ?></span><em>Like</em></button>
+      <a class="post-action-big" href="#comments" aria-label="Go to comments"><i data-lucide="message-circle"></i><span><?= Helper::formatNumber((int)$post['comments_count']) ?></span><em>Comment</em></a>
       <button
         type="button"
         class="post-action-big"
         data-share-title="<?= Helper::sanitize($post['title'] ?? 'FatakNews story') ?>"
         data-share-url="<?= Helper::sanitize($canonicalUrl) ?>"
         aria-label="Share article"
-      ><i class="fa fa-share-alt"></i> Share</button>
+      ><i data-lucide="share-2"></i><em>Share</em></button>
+      <button type="button" class="post-action-big" data-bookmark="<?= $post['id'] ?>" aria-label="Save article"><i data-lucide="bookmark"></i><em>Save</em></button>
     </div>
 
     <section class="comments-section" id="comments">

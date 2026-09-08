@@ -63,6 +63,22 @@
   }
   .page-wrapper { max-width: 100%; padding: 0; margin: 0; display: block; }
 
+  /* ---------- Lucide outline icons (consistent stroke) ---------- */
+  svg.lucide { stroke-width: 2; flex: 0 0 auto; }
+  .m-iconbtn svg.lucide { width: 22px; height: 22px; }
+  .m-bottomnav a svg.lucide { width: 23px; height: 23px; }
+  .m-section-head h2 svg.lucide { width: 15px; height: 15px; }
+  .m-meta svg.lucide { width: 13px; height: 13px; }
+  .m-kicker svg.lucide { width: 12px; height: 12px; }
+  .m-catrow > svg.lucide { width: 18px; height: 18px; color: var(--m-text-3); }
+  .m-catrow-icon svg.lucide { width: 20px; height: 20px; }
+  .m-menu-item svg.lucide, .m-settings-row svg.lucide { width: 19px; height: 19px; }
+  .m-menu-item > svg.lucide:last-child, .m-settings-row > svg.lucide:last-child { width: 15px; height: 15px; color: var(--m-text-3); }
+  .m-chip svg.lucide { width: 14px; height: 14px; vertical-align: -2px; }
+  .post-actions-bar svg.lucide { width: 20px; height: 20px; }
+  .m-profile-head svg.lucide { width: 22px; height: 22px; }
+  .m-searchbar svg.lucide { width: 18px; height: 18px; color: var(--m-text-3); }
+
   /* hide desktop chrome */
   .navbar, .ticker-wrap, .site-footer, .sidebar-col, .mobile-nav, .mobile-nav-overlay,
   .home-latest-sidebar, aside.sidebar-col, .home-desktop-only, .mobile-section-bottomnav,
@@ -243,15 +259,27 @@
   .single-post-page .post-content { order: 4; }
   .single-post-page .comments-section { order: 8; }
 
-  /* compact byline */
-  .single-post-page .post-meta-bar { flex-direction: column; align-items: flex-start; gap: 10px; margin-top: 14px; }
-  .single-post-page .post-author { display: flex; align-items: center; gap: 10px; }
-  .single-post-page .post-author-info span { display: none; }               /* hide @username line */
-  .single-post-page .post-author-info strong { font-size: 14px; }
-  .single-post-page .post-meta-extra {
-    display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--m-text-3);
+  /* compact byline — hide the verbose desktop meta, show one clean line */
+  .single-post-page .post-meta-bar { display: none; }
+  .m-byline {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+    margin-top: 14px; font-size: 13px; color: var(--m-text-3);
   }
-  .single-post-page .post-meta-extra span { display: inline-flex; align-items: center; gap: 5px; }
+  .m-byline img { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; }
+  .m-byline a { color: var(--m-text-2); font-weight: 600; }
+  .m-byline i { font-style: normal; color: var(--m-text-3); }
+
+  /* action bar — icon + count + label, evenly spaced (mockup) */
+  .post-actions-bar .post-action-big {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    background: transparent; border: 0; padding: 4px 0; color: var(--m-text-2);
+    font-size: 11px; font-weight: 600; text-decoration: none;
+  }
+  .post-actions-bar .post-action-big em { font-style: normal; color: var(--m-text-3); font-size: 11px; }
+  .post-actions-bar .post-action-big .react-count,
+  .post-actions-bar .post-action-big > span { font-size: 12px; font-weight: 700; color: var(--m-text); }
+  .post-actions-bar .post-action-big.is-active { color: var(--m-accent); }
+  .post-actions-bar .post-action-big.is-active .react-count { color: var(--m-accent); }
   .m-article-bar {
     position: sticky; top: 0; z-index: 900;
     display: flex; align-items: center; gap: 6px; padding: 0 8px; height: var(--m-topbar-h);

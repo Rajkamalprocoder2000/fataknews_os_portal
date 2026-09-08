@@ -61,17 +61,17 @@
 <?php
 $mNavPath = rtrim(Helper::requestPath(), '/') ?: '/';
 $mNavItems = [
-  ['/', 'fa-house', 'Home', ['/', '/feed']],
-  ['/shorts', 'fa-play-circle', 'Shorts', ['/shorts']],
-  ['/trending', 'fa-compass', 'Explore', ['/explore', '/trending', '/search', '/categories']],
-  ['/bookmarks', 'fa-bookmark', 'Saved', ['/bookmarks']],
-  [Auth::check() ? '/profile' : '/login', 'fa-user', 'Profile', ['/profile', '/settings', '/login', '/notifications']],
+  ['/', 'home', 'Home', ['/', '/feed']],
+  ['/shorts', 'play-circle', 'Shorts', ['/shorts']],
+  ['/trending', 'compass', 'Explore', ['/explore', '/trending', '/search', '/categories']],
+  ['/bookmarks', 'bookmark', 'Saved', ['/bookmarks']],
+  [Auth::check() ? '/profile' : '/login', 'user', 'Profile', ['/profile', '/settings', '/login', '/notifications']],
 ];
 ?>
 <nav class="m-bottomnav m-only" aria-label="Primary">
   <?php foreach ($mNavItems as [$href, $icon, $label, $match]): ?>
   <a href="<?= $href ?>" class="<?= in_array($mNavPath, $match, true) ? 'active' : '' ?>">
-    <i class="fa <?= $icon ?>"></i><span><?= $label ?></span>
+    <i data-lucide="<?= $icon ?>"></i><span><?= $label ?></span>
   </a>
   <?php endforeach; ?>
 </nav>
@@ -81,6 +81,13 @@ $mNavItems = [
 
 <script>
 (function () {
+  // render Lucide outline icons (mobile UI)
+  function drawIcons(){ if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons(); }
+  if (document.readyState !== 'loading') drawIcons();
+  document.addEventListener('DOMContentLoaded', drawIcons);
+  window.addEventListener('load', drawIcons);
+  window.fnDrawIcons = drawIcons;
+
   // splash: hide shortly after first load, remember for the session
   var s = document.getElementById('mSplash');
   if (s && !s.classList.contains('is-hidden')) {
