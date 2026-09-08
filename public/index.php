@@ -1076,6 +1076,11 @@ function matchDynamic(string $uri): ?array {
     return null;
 }
 
+if (str_starts_with($uri, '/api/mobile')) {
+    require __DIR__ . '/../api/mobile.php';
+    exit;
+}
+
 if (isset($routes[$method][$uri])) {
     ($routes[$method][$uri])();
 } elseif ($dynamic = matchDynamic($uri)) {
