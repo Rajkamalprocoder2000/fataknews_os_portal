@@ -229,6 +229,17 @@ $mTrending = array_slice($trending ?? [], 0, 6);
   <a href="/categories" class="m-chip" aria-label="All categories"><i data-lucide="menu"></i></a>
 </div>
 
+<?php $mStories = array_slice($storyGroups ?? [], 0, 12); if (!empty($mStories)): ?>
+<div class="m-stories m-only">
+  <?php foreach ($mStories as $sg): ?>
+  <a href="/community" class="m-story <?= !empty($sg['has_unseen']) ? 'is-unseen' : '' ?>">
+    <span class="m-story-ring"><img src="<?= Helper::avatarUrl($sg['avatar']) ?>" alt="<?= Helper::sanitize($sg['full_name'] ?? '') ?>" loading="lazy"></span>
+    <span class="m-story-name"><?= Helper::sanitize(explode(' ', trim((string)($sg['full_name'] ?: $sg['username'])))[0]) ?></span>
+  </a>
+  <?php endforeach; ?>
+</div>
+<?php endif; ?>
+
 <?php if ($mLead):
   $leadUrl = '/' . ($mLead['category_slug'] ?: 'news') . '/' . $mLead['slug'];
 ?>

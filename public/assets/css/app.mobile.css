@@ -163,6 +163,21 @@
   }
   .m-chip.active { background: var(--m-accent); color: var(--m-accent-ink); }
 
+  /* ---------- stories strip ---------- */
+  .m-stories {
+    display: flex; gap: 14px; overflow-x: auto; scrollbar-width: none;
+    padding: 12px 16px; background: var(--m-surface); border-bottom: 1px solid var(--m-border);
+  }
+  .m-stories::-webkit-scrollbar { display: none; }
+  .m-story { flex: 0 0 auto; width: 60px; display: flex; flex-direction: column; align-items: center; gap: 5px; text-decoration: none; }
+  .m-story-ring {
+    width: 58px; height: 58px; border-radius: 50%; padding: 2px;
+    background: var(--m-border); display: flex; align-items: center; justify-content: center;
+  }
+  .m-story.is-unseen .m-story-ring { background: linear-gradient(135deg, var(--m-accent), #ff8a3d); }
+  .m-story-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--m-surface); }
+  .m-story-name { font-size: 11px; color: var(--m-text-2); max-width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
   /* ---------- hero card ---------- */
   .m-hero {
     display: block; margin: 16px; border-radius: var(--m-radius); overflow: hidden;
@@ -320,6 +335,20 @@
 
   /* author card */
   .author-card { margin: 14px; border-radius: var(--m-radius); background: var(--m-surface); border-color: var(--m-border); }
+
+  /* community feed */
+  .community-page .feed-col > .site-breadcrumb { display: none; }
+  .community-stories-card { margin: 12px 16px !important; padding: 14px !important; }
+  .community-create-cta { padding: 0 16px 12px; }
+  .community-create-cta .btn-write { width: 100%; justify-content: center; border-radius: 12px; }
+  .community-feed { padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
+  .community-card {
+    padding: 14px !important; border-radius: var(--m-radius) !important;
+    background: var(--m-surface) !important; border: 1px solid var(--m-border) !important; box-shadow: var(--m-shadow-sm) !important;
+  }
+  .community-card-title a { color: var(--m-text); font-size: 16px; font-weight: 700; }
+  .community-card-excerpt { color: var(--m-text-2); font-size: 14px; }
+  .community-card-img { border-radius: var(--m-radius-sm); }
 
   /* explore (social embeds) feed */
   .explore-grid { display: block; padding: 12px 14px; }

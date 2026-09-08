@@ -138,16 +138,12 @@ if (!$mHideTopBar):
     <span><b>Fatak<span>News</span></b><small>News That Matters</small></span>
   </a>
   <a href="/search" class="m-iconbtn" aria-label="Search"><i data-lucide="search"></i></a>
-  <?php if (Auth::check()): ?>
-  <a href="/notifications" class="m-iconbtn" aria-label="Notifications">
+  <a href="<?= Auth::check() ? '/notifications' : '/login' ?>" class="m-iconbtn" aria-label="Notifications">
     <i data-lucide="bell"></i>
-    <?php $mNotif = (new NotificationModel())->countUnread((int)Auth::id()); if ($mNotif > 0): ?>
+    <?php if (Auth::check()): $mNotif = (new NotificationModel())->countUnread((int)Auth::id()); if ($mNotif > 0): ?>
     <span class="m-dot"><?= $mNotif > 9 ? '9+' : $mNotif ?></span>
-    <?php endif; ?>
+    <?php endif; endif; ?>
   </a>
-  <?php else: ?>
-  <a href="/login" class="m-iconbtn" aria-label="Login"><i data-lucide="user"></i></a>
-  <?php endif; ?>
 </header>
 <?php else: ?>
 <header class="m-topbar m-only">

@@ -64,8 +64,8 @@ $mNavItems = [
   ['/', 'home', 'Home', ['/', '/feed']],
   ['/shorts', 'play-circle', 'Shorts', ['/shorts']],
   ['/trending', 'compass', 'Explore', ['/explore', '/trending', '/search', '/categories']],
-  ['/bookmarks', 'bookmark', 'Saved', ['/bookmarks']],
-  [Auth::check() ? '/profile' : '/login', 'user', 'Profile', ['/profile', '/settings', '/login', '/notifications']],
+  ['/community', 'users', 'Community', ['/community']],
+  [Auth::check() ? '/profile' : '/login', 'user', 'Profile', ['/profile', '/settings', '/login', '/notifications', '/bookmarks']],
 ];
 ?>
 <nav class="m-bottomnav m-only" aria-label="Primary">
