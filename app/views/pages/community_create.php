@@ -19,78 +19,53 @@ $structuredData = [
     Helper::breadcrumbSchema($breadcrumbItems),
 ];
 $bodyClass = 'community-page community-create-page';
+$cuUser = Auth::user();
+$mBarTitle = 'Create Post';
 include VIEW . 'layouts/header.php';
 ?>
-<div class="home-grid">
-  <main class="feed-col">
-    <?= Helper::breadcrumbNav($breadcrumbItems) ?>
+<form action="/api/posts" method="post" enctype="multipart/form-data" id="communityCreateForm" class="m-compose">
+  <?= Csrf::field() ?>
+  <input type="hidden" name="type" value="community_post">
+  <input type="hidden" name="allow_comments" value="1">
 
-    <div class="create-page community-create-shell">
-      <div class="create-header community-create-header">
-        <div class="widget-title"><i class="fa fa-pen"></i> Community Submission</div>
-        <h1 class="community-create-title">Write something worth discussing</h1>
-        <p class="community-create-intro">Share a clear, thoughtful update for the FatakNews community. Your post will be submitted through the standard community review flow.</p>
-      </div>
-
-      <form action="/api/posts" method="post" enctype="multipart/form-data" id="communityCreateForm">
-        <?= Csrf::field() ?>
-        <input type="hidden" name="type" value="community_post">
-        <input type="hidden" name="allow_comments" value="1">
-
-        <div class="create-layout community-create-layout">
-          <div class="create-main">
-            <input type="text" class="create-title-input" name="title" placeholder="Give your post a strong title" required>
-            <textarea class="create-editor" name="content" placeholder="Write your post here..." required></textarea>
-          </div>
-
-          <aside class="create-side community-create-side">
-            <div class="create-widget">
-              <label>Summary</label>
-              <textarea class="form-control" name="excerpt" rows="4" placeholder="Short summary for cards and previews"></textarea>
-            </div>
-
-            <div class="create-widget">
-              <label>Tags</label>
-              <input class="form-control" type="text" name="tags" placeholder="politics, campus, local issue">
-            </div>
-
-            <div class="create-widget">
-              <label>Thumbnail</label>
-              <input class="form-control" type="file" name="thumbnail" accept="image/*">
-              <input class="form-control community-create-alt" type="text" name="image_alt" placeholder="Image alt text (optional)" maxlength="255">
-            </div>
-
-            <div class="create-widget">
-              <label>Video (optional)</label>
-              <input class="form-control" type="url" name="video_url" placeholder="YouTube / Facebook / Instagram / X video link">
-              <input class="form-control" style="margin-top:8px" type="file" name="video" accept="video/mp4,video/webm,video/quicktime">
-              <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-top:10px;font-weight:500">
-                <input type="checkbox" name="location" value="shorts" style="accent-color:var(--red)"> Post this as a Short (vertical video)
-              </label>
-            </div>
-
-            <div class="community-create-actions">
-              <button class="btn-write" type="submit" name="status" value="published" id="communitySubmitPublish"><i class="fa fa-paper-plane"></i> Submit for review</button>
-              <button class="btn-ghost" type="submit" name="status" value="draft" id="communitySubmitDraft">Save draft</button>
-            </div>
-          </aside>
-        </div>
-      </form>
+  <div class="m-compose-user">
+    <img src="<?= Helper::avatarUrl($cuUser['avatar'] ?? null) ?>" alt="">
+    <div>
+      <strong><?= Helper::sanitize($cuUser['full_name'] ?: ('@' . $cuUser['username'])) ?></strong>
+      <span>Posting to Community</span>
     </div>
-  </main>
+  </div>
 
-  <aside class="sidebar-col">
-    <div class="sidebar-widget">
-      <div class="widget-title"><i class="fa fa-circle-question"></i> Writing Tips</div>
-      <p class="community-create-sidebar-copy">Use a specific headline, explain the issue in plain language, and keep the first paragraph useful enough to stand on its own.</p>
-    </div>
+  <input type="text" class="m-compose-title" name="title" placeholder="Title" required>
+  <textarea class="m-compose-body" name="content" placeholder="Write your post here..." required></textarea>
 
-    <div class="sidebar-widget">
-      <div class="widget-title"><i class="fa fa-shield-heart"></i> Community Rules</div>
-      <p class="community-create-sidebar-copy">Posts should stay civil, factual, and relevant. Avoid abuse, spam, personal attacks, and misleading claims.</p>
+  <div class="m-compose-panel" data-panel="photo" hidden>
+    <input type="file" name="thumbnail" accept="image/*" id="cuThumb">
+    <div class="m-compose-preview" id="cuThumbPreview" hidden></div>
+  </div>
+  <div class="m-compose-panel" data-panel="video" hidden>
+    <input type="url" name="video_url" placeholder="YouTube / Facebook / Instagram / X link">
+    <input type="file" name="video" accept="video/mp4,video/webm,video/quicktime">
+    <label class="m-compose-check"><input type="checkbox" name="location" value="shorts"> Post as a Short (vertical video)</label>
+  </div>
+  <div class="m-compose-panel" data-panel="tags" hidden>
+    <input type="text" name="tags" placeholder="Tags — comma separated (politics, campus, local)">
+  </div>
+
+  <div class="m-compose-add">
+    <span>Add to your post</span>
+    <div class="m-compose-addbtns">
+      <button type="button" data-toggle-panel="photo" aria-label="Add photo"><i data-lucide="image"></i></button>
+      <button type="button" data-toggle-panel="video" aria-label="Add video"><i data-lucide="video"></i></button>
+      <button type="button" data-toggle-panel="tags" aria-label="Add tags"><i data-lucide="hash"></i></button>
     </div>
-  </aside>
-</div>
+  </div>
+
+  <div class="m-compose-actions">
+    <button class="m-compose-post" type="submit" name="status" value="published" id="communitySubmitPublish">Post</button>
+    <button class="m-compose-draft" type="submit" name="status" value="draft" id="communitySubmitDraft">Save draft</button>
+  </div>
+</form>
 <?php
 $extraScripts = <<<HTML
 <script>
@@ -162,6 +137,31 @@ $extraScripts = <<<HTML
     const submitter = event.submitter;
     await submitCommunityForm(submitter);
   });
+
+  form.querySelectorAll('[data-toggle-panel]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const panel = form.querySelector('.m-compose-panel[data-panel="' + btn.dataset.togglePanel + '"]');
+      if (!panel) return;
+      panel.hidden = !panel.hidden;
+      btn.classList.toggle('is-on', !panel.hidden);
+      if (!panel.hidden) { const f = panel.querySelector('input,textarea'); if (f) f.focus(); }
+    });
+  });
+
+  const thumb = document.getElementById('cuThumb');
+  const preview = document.getElementById('cuThumbPreview');
+  if (thumb) thumb.addEventListener('change', () => {
+    const file = thumb.files && thumb.files[0];
+    if (!file) { preview.hidden = true; preview.innerHTML = ''; return; }
+    preview.hidden = false;
+    preview.innerHTML = '<img src="' + URL.createObjectURL(file) + '" alt="">';
+  });
+
+  const ta = form.querySelector('.m-compose-body');
+  if (ta) {
+    const grow = () => { ta.style.height = 'auto'; ta.style.height = Math.max(120, ta.scrollHeight) + 'px'; };
+    ta.addEventListener('input', grow); grow();
+  }
 })();
 </script>
 HTML;

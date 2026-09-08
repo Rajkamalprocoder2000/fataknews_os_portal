@@ -521,6 +521,57 @@
   .pagination { padding: 18px 14px calc(var(--m-bottomnav-h) + 24px); }
   .toast-container { bottom: calc(var(--m-bottomnav-h) + var(--m-safe-b) + 12px); }
 
+  /* ---------- compose (community create) ---------- */
+  .m-compose { max-width: 640px; margin: 0 auto; padding: 14px 16px 28px; display: block; }
+  .m-compose-user { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .m-compose-user img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+  .m-compose-user strong { display: block; font-size: 14px; color: var(--m-text); }
+  .m-compose-user span { font-size: 12px; color: var(--m-text-3); }
+  .m-compose-title {
+    width: 100%; border: 0; background: transparent; outline: none;
+    font-family: var(--m-font); font-size: 19px; font-weight: 700; color: var(--m-text);
+    padding: 6px 0; border-bottom: 1px solid var(--m-border);
+  }
+  .m-compose-title::placeholder { color: var(--m-text-3); font-weight: 600; }
+  .m-compose-body {
+    width: 100%; min-height: 120px; border: 0; background: transparent; outline: none; resize: none;
+    font-family: var(--m-font); font-size: 16px; line-height: 1.55; color: var(--m-text); padding: 12px 0;
+  }
+  .m-compose-body::placeholder { color: var(--m-text-3); }
+  .m-compose-panel {
+    background: var(--m-surface-2); border: 1px solid var(--m-border); border-radius: 12px;
+    padding: 12px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .m-compose-panel input[type="url"], .m-compose-panel input[type="text"] {
+    width: 100%; padding: 11px 12px; border: 1px solid var(--m-border); border-radius: 10px;
+    background: var(--m-surface); color: var(--m-text); font-size: 14px; font-family: var(--m-font);
+  }
+  .m-compose-panel input[type="file"] { font-size: 13px; color: var(--m-text-2); }
+  .m-compose-check { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--m-text-2); font-weight: 500; }
+  .m-compose-check input { accent-color: var(--m-accent); }
+  .m-compose-preview img { width: 100%; border-radius: 10px; display: block; }
+  .m-compose-add {
+    display: flex; align-items: center; justify-content: space-between;
+    border: 1px solid var(--m-border); border-radius: 12px; padding: 10px 12px; margin: 4px 0 16px;
+  }
+  .m-compose-add > span { font-size: 13px; font-weight: 600; color: var(--m-text-2); }
+  .m-compose-addbtns { display: flex; gap: 6px; }
+  .m-compose-addbtns button {
+    width: 38px; height: 38px; border-radius: 10px; border: 0; background: var(--m-surface-2);
+    color: var(--m-text-2); display: flex; align-items: center; justify-content: center;
+  }
+  .m-compose-addbtns button.is-on { background: var(--m-accent-soft); color: var(--m-accent); }
+  .m-compose-addbtns svg.lucide { width: 19px; height: 19px; }
+  .m-compose-actions { display: flex; gap: 10px; }
+  .m-compose-post {
+    flex: 1; padding: 13px; border-radius: 12px; border: 0;
+    background: var(--m-accent); color: var(--m-accent-ink); font-size: 15px; font-weight: 700; font-family: var(--m-font);
+  }
+  .m-compose-draft {
+    padding: 13px 16px; border-radius: 12px; border: 1px solid var(--m-border);
+    background: var(--m-surface); color: var(--m-text-2); font-size: 14px; font-weight: 600; font-family: var(--m-font);
+  }
+
   /* ---------- search screen ---------- */
   .m-searchscreen { padding-top: 14px; }
   .m-searchbar {
@@ -571,6 +622,27 @@
 @media (min-width: 769px) {
   .m-only { display: none !important; }
   .m-topbar, .m-bottomnav, .m-chips { display: none !important; }
+
+  /* community compose form still uses this markup on desktop */
+  .m-compose { max-width: 620px; margin: 32px auto; padding: 24px; background: var(--m-surface); border: 1px solid var(--m-border); border-radius: 16px; }
+  .m-compose-user { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .m-compose-user img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+  .m-compose-user strong { display: block; font-size: 15px; }
+  .m-compose-user span { font-size: 12px; color: var(--m-text-3); }
+  .m-compose-title { width: 100%; border: 0; border-bottom: 1px solid var(--m-border); background: transparent; font-size: 20px; font-weight: 700; padding: 8px 0; outline: none; color: var(--m-text); }
+  .m-compose-body { width: 100%; min-height: 140px; border: 0; background: transparent; resize: vertical; font-size: 16px; line-height: 1.6; padding: 12px 0; outline: none; color: var(--m-text); font-family: inherit; }
+  .m-compose-panel { background: var(--m-surface-2); border: 1px solid var(--m-border); border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .m-compose-panel input { width: 100%; padding: 10px 12px; border: 1px solid var(--m-border); border-radius: 10px; background: var(--m-surface); color: var(--m-text); }
+  .m-compose-check { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .m-compose-preview img { width: 100%; border-radius: 10px; }
+  .m-compose-add { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--m-border); border-radius: 12px; padding: 10px 12px; margin: 6px 0 16px; }
+  .m-compose-addbtns { display: flex; gap: 6px; }
+  .m-compose-addbtns button { width: 40px; height: 40px; border-radius: 10px; border: 0; background: var(--m-surface-2); color: var(--m-text-2); cursor: pointer; }
+  .m-compose-addbtns button.is-on { background: var(--m-accent-soft); color: var(--m-accent); }
+  .m-compose-addbtns svg.lucide { width: 19px; height: 19px; }
+  .m-compose-actions { display: flex; gap: 10px; }
+  .m-compose-post { flex: 1; padding: 13px; border-radius: 12px; border: 0; background: var(--m-accent); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .m-compose-draft { padding: 13px 18px; border-radius: 12px; border: 1px solid var(--m-border); background: transparent; color: var(--m-text-2); font-weight: 600; cursor: pointer; }
 
   /* /categories renders the same markup on desktop — give it a sane grid */
   .m-catlist { max-width: 1000px; margin: 32px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
