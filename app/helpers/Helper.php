@@ -1269,7 +1269,7 @@ public static function analyticsHeadHtml(): string {
             "img-src 'self' data: https: blob:",
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com",
             "font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com",
-            "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://platform.twitter.com https://www.instagram.com https://www.tiktok.com",
+            "script-src 'self' 'unsafe-inline' https://platform.twitter.com https://www.instagram.com https://www.tiktok.com",
             "connect-src 'self' https://accounts.google.com https://oauth2.googleapis.com https://openidconnect.googleapis.com https://api.x.ai https://api.groq.com",
             "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://platform.twitter.com https://www.instagram.com https://www.tiktok.com",
             "form-action 'self' https://accounts.google.com",

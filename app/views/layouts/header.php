@@ -96,7 +96,8 @@ $tickerBreaking = $tickerBreaking ?? Helper::cacheRemember('layout_breaking_tick
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
 <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous"></noscript>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.462.0/lucide.min.js"></script>
+<?php $lucideVer = @filemtime(BASE_PATH . '/public/assets/js/lucide.min.js') ?: '1'; ?>
+<script defer src="/public/assets/js/lucide.min.js?v=<?= $lucideVer ?>"></script>
 <link rel="stylesheet" href="/public/assets/css/<?= $appCssFile ?>?v=<?= $appCssVersion ?>">
 <?php $appMobileCssVersion = @filemtime(BASE_PATH . '/public/assets/css/app.mobile.css') ?: time(); ?>
 <link rel="stylesheet" href="/public/assets/css/app.mobile.css?v=<?= $appMobileCssVersion ?>">
