@@ -80,10 +80,66 @@ if ($r0 === 'auth' && $r1 === 'login' && $method === 'POST') {
     if (empty($user['is_active'])) fail('Account is suspended', 403);
     if (($user['role_slug'] ?? 'user') === 'user') fail('This app is for FatakNews staff only', 403);
 
-    $um->updateLastLogin((int) $user['id']);
+    recordMobileLogin($um, (int) $user['id']);
     $full = $um->findById((int) $user['id']);
     $token = Jwt::issue(['uid' => (int) $user['id'], 'role' => $full['role_slug']]);
     out(['success' => true, 'token' => $token, 'expires_in' => (int) JWT_EXPIRE, 'user' => publicUser($full)]);
+}
+
+if ($r0 === 'auth' && $r1 === 'google' && $method === 'POST') {
+    $idToken = trim((string) inp($body, 'id_token', ''));
+    if ($idToken === '') fail('Google ID token is required', 422);
+    if (trim((string) GOOGLE_CLIENT_ID) === '') fail('Google sign-in is not configured', 503);
+
+    $profile = googleIdTokenProfile($idToken);
+    $googleId = trim((string) ($profile['sub'] ?? ''));
+    $email = trim((string) ($profile['email'] ?? ''));
+    if ($googleId === '' || $email === '' || empty($profile['email_verified'])) {
+        fail('Google did not return a verified email address', 401);
+    }
+
+    $um = new UserModel();
+    $user = $um->findByGoogleIdentity($googleId);
+    if (!$user) {
+        $user = $um->findByEmail($email);
+        if ($user) {
+            $um->linkGoogleIdentity((int) $user['id'], $googleId, true);
+            $user = $um->findById((int) $user['id']);
+        }
+    }
+    if (!$user || empty($user['is_active'])) fail('Your account is not available for login', 403);
+    if (($user['role_slug'] ?? 'user') === 'user') fail('This app is for FatakNews staff only', 403);
+
+    recordMobileLogin($um, (int) $user['id']);
+    $full = $um->findById((int) $user['id']);
+    $token = Jwt::issue(['uid' => (int) $full['id'], 'role' => $full['role_slug']]);
+    out(['success' => true, 'token' => $token, 'expires_in' => (int) JWT_EXPIRE, 'user' => publicUser($full)]);
+}
+
+function googleIdTokenProfile(string $idToken): array {
+    if (!function_exists('curl_init')) fail('Google sign-in is unavailable on this server', 503);
+
+    $ch = curl_init('https://oauth2.googleapis.com/tokeninfo?id_token=' . rawurlencode($idToken));
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 15,
+        CURLOPT_HTTPHEADER => ['Accept: application/json'],
+    ]);
+    $raw = curl_exec($ch);
+    $status = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+    curl_close($ch);
+
+    $profile = is_string($raw) ? json_decode($raw, true) : null;
+    if ($status !== 200 || !is_array($profile)) fail('Google ID token could not be verified', 401);
+    if (!in_array($profile['iss'] ?? '', ['accounts.google.com', 'https://accounts.google.com'], true)) {
+        fail('Google ID token issuer is invalid', 401);
+    }
+    if (!hash_equals((string) GOOGLE_CLIENT_ID, (string) ($profile['aud'] ?? ''))) {
+        fail('Google ID token was issued for another client', 401);
+    }
+    if ((int) ($profile['exp'] ?? 0) < time()) fail('Google ID token has expired', 401);
+
+    return $profile;
 }
 
 if ($r0 === 'auth' && $r1 === 'refresh' && $method === 'POST') {
@@ -108,6 +164,15 @@ function publicUser(array $u): array {
         'is_verified' => (bool) ($u['is_verified'] ?? false),
         'posts_count' => (int) ($u['posts_count'] ?? 0),
     ];
+}
+
+// Login must still succeed when optional audit columns have not been deployed.
+function recordMobileLogin(UserModel $users, int $userId): void {
+    try {
+        $users->updateLastLogin($userId);
+    } catch (Throwable $error) {
+        error_log('Mobile API could not update last-login audit data: ' . $error->getMessage());
+    }
 }
 
 /* ======================= ME ======================= */
@@ -671,5 +736,13 @@ if ($r0 === 'ai' && $r1 === 'generate' && $method === 'POST') {
 fail('Endpoint not found: ' . $method . ' ' . $path, 404);
 
 } catch (Throwable $e) {
-    fail(DEBUG ? $e->getMessage() : 'Server error', 500);
+    $errorId = bin2hex(random_bytes(6));
+    error_log(sprintf(
+        'Mobile API [%s] %s %s: %s',
+        $errorId,
+        $method,
+        $path,
+        $e->getMessage(),
+    ));
+    fail(DEBUG ? $e->getMessage() : "Server error. Reference: $errorId", 500);
 }
