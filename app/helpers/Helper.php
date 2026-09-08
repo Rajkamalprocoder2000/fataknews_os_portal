@@ -1275,7 +1275,7 @@ public static function analyticsHeadHtml(): string {
             $ytId = '';
             if (preg_match('#/embed/([A-Za-z0-9_-]{6,})#', $yt, $m)) { $ytId = $m[1]; }
             $sep = str_contains($yt, '?') ? '&' : '?';
-            $src = $yt . $sep . 'autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&playsinline=1&rel=0'
+            $src = $yt . $sep . 'autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&playsinline=1&rel=0&enablejsapi=1'
                  . ($ytId !== '' ? '&playlist=' . $ytId : '');
             return '<iframe class="m-short-media" src="' . self::sanitize($src) . '" title="Short video"'
                  . ' allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen'

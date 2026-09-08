@@ -46,6 +46,7 @@ include VIEW . 'layouts/header.php';
     <?php endif; ?>
   </div>
   <?php else: ?>
+  <button type="button" class="m-short-sound" id="mShortSound" aria-label="Toggle sound"><i data-lucide="volume-x"></i></button>
   <div class="m-shorts-feed" id="mShortsFeed">
     <?php foreach ($shorts['data'] as $post):
       $shortUrl = '/' . ($post['category_slug'] ?: 'news') . '/' . $post['slug'];
@@ -84,16 +85,58 @@ include VIEW . 'layouts/header.php';
   </div>
   <script>
   (function () {
-    var vids = document.querySelectorAll('.m-short video.m-short-media');
-    if (!('IntersectionObserver' in window) || !vids.length) return;
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        var v = e.target;
-        if (e.isIntersecting && e.intersectionRatio > 0.6) { v.play().catch(function(){}); }
-        else { v.pause(); }
+    var soundOn = false;
+    var sections = document.querySelectorAll('.m-short');
+    var soundBtn = document.getElementById('mShortSound');
+
+    function ytCmd(iframe, func) {
+      try { iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: func, args: [] }), '*'); } catch (e) {}
+    }
+    function apply(section, active) {
+      var v = section.querySelector('video.m-short-media');
+      var f = section.querySelector('iframe.m-short-media');
+      if (v) {
+        v.muted = !(active && soundOn);
+        if (active) { v.play().catch(function(){}); } else { v.pause(); }
+      }
+      if (f && f.src.indexOf('youtube') > -1) {
+        ytCmd(f, active ? 'playVideo' : 'pauseVideo');
+        ytCmd(f, (active && soundOn) ? 'unMute' : 'mute');
+      }
+    }
+    function refresh() {
+      sections.forEach(function (s) {
+        var r = s.getBoundingClientRect();
+        var active = r.top < window.innerHeight * 0.4 && r.bottom > window.innerHeight * 0.4;
+        apply(s, active);
       });
-    }, { threshold: [0, 0.6, 1] });
-    vids.forEach(function (v) { io.observe(v); });
+    }
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { apply(e.target, e.isIntersecting && e.intersectionRatio > 0.55); });
+      }, { threshold: [0, 0.55, 1] });
+      sections.forEach(function (s) { io.observe(s); });
+    }
+    document.getElementById('mShortsFeed').addEventListener('scroll', function () {
+      clearTimeout(window._shScroll); window._shScroll = setTimeout(refresh, 120);
+    });
+    if (soundBtn) {
+      soundBtn.addEventListener('click', function () {
+        soundOn = !soundOn;
+        soundBtn.innerHTML = soundOn ? '<i data-lucide="volume-2"></i>' : '<i data-lucide="volume-x"></i>';
+        if (window.fnDrawIcons) window.fnDrawIcons();
+        refresh();
+      });
+    }
+    // tap on video area toggles play/pause for uploaded videos
+    sections.forEach(function (s) {
+      var v = s.querySelector('video.m-short-media');
+      if (v) s.addEventListener('click', function (e) {
+        if (e.target.closest('.m-short-actions,.m-short-overlay,.m-short-sound,.m-shorts-back')) return;
+        if (v.paused) v.play().catch(function(){}); else v.pause();
+      });
+    });
+    setTimeout(refresh, 400);
   })();
   </script>
   <?php endif; ?>
