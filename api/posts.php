@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status  = $_POST['status'] ?? 'draft';
     if (!$title || !$content) Helper::json(['error' => 'Title and content are required'], 400);
     $requestedLocation = trim((string)($_POST['location'] ?? 'both'));
-    $allowedLocations = ['home', 'category', 'both', 'explore'];
+    $allowedLocations = ['home', 'category', 'both', 'explore', 'shorts'];
     $normalizedLocation = in_array($requestedLocation, $allowedLocations, true) ? $requestedLocation : 'both';
 
     $requestedSubcategoryId = (int)($_POST['subcategory_id'] ?? 0);
@@ -201,7 +201,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data['thumbnail'] = $filename;
     }
 
-    if (!$isCommunityType && $data['location'] !== 'explore' && empty($data['thumbnail']) && empty($existingPost['thumbnail'])) {
+    // Optional video upload (used for Shorts / Explore video posts)
+    $videoUploaded = isset($_FILES['video']) && (int)($_FILES['video']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE;
+    if ($videoUploaded) {
+        $videoName = Upload::video($_FILES['video'], 'shorts');
+        if (!$videoName) {
+            Helper::json(['error' => 'The video could not be saved. Use MP4/WebM under 100MB.'], 422);
+        }
+        $data['video_url'] = Helper::publicUrl('uploads/shorts/' . $videoName);
+    }
+
+    if ($data['location'] === 'shorts' && empty($data['video_url']) && empty($existingPost['video_url'])) {
+        Helper::json(['error' => 'A Short needs a video — upload a file or paste a video link.'], 422);
+    }
+
+    if (!$isCommunityType && !in_array($data['location'], ['explore', 'shorts'], true) && empty($data['thumbnail']) && empty($existingPost['thumbnail'])) {
         Helper::json(['error' => 'A cover image is required for standard article and news posts.'], 422);
     }
 

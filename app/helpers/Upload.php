@@ -68,6 +68,44 @@ class Upload {
         return $filename;
     }
 
+    public static function video(array $file, string $dir = 'shorts') {
+        $error = (int)($file['error'] ?? UPLOAD_ERR_NO_FILE);
+        if ($error !== UPLOAD_ERR_OK) {
+            return false;
+        }
+        if ((int)($file['size'] ?? 0) > MAX_VIDEO_SIZE) {
+            return false;
+        }
+
+        $tmpName = (string)($file['tmp_name'] ?? '');
+        if ($tmpName === '' || !is_uploaded_file($tmpName)) {
+            return false;
+        }
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime  = (string)finfo_file($finfo, $tmpName);
+        finfo_close($finfo);
+
+        $map = [
+            'video/mp4'        => 'mp4',
+            'video/webm'       => 'webm',
+            'video/ogg'        => 'ogv',
+            'video/quicktime'  => 'mov',
+            'video/x-m4v'      => 'm4v',
+        ];
+        if (!isset($map[$mime])) {
+            return false;
+        }
+
+        $filename  = uniqid('fv_', true) . '.' . $map[$mime];
+        $targetDir = UPLOAD_PATH . '/' . $dir;
+        if (!is_dir($targetDir) && !mkdir($targetDir, 0755, true) && !is_dir($targetDir)) {
+            return false;
+        }
+
+        return move_uploaded_file($tmpName, $targetDir . '/' . $filename) ? $filename : false;
+    }
+
     private static function resize(string $path, string $mime, int $maxW, int $maxH): void {
         [$w, $h] = getimagesize($path);
         if ($w <= $maxW && $h <= $maxH) return;

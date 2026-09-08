@@ -273,6 +273,7 @@ if ($post && $post['user_id'] != Auth::id() && !Auth::isManager()) {
             <option value="home" <?= $initialPlacement === 'home' ? 'selected' : '' ?>>Home only</option>
             <option value="category" <?= $initialPlacement === 'category' ? 'selected' : '' ?>>Category only</option>
             <option value="explore" <?= $initialPlacement === 'explore' ? 'selected' : '' ?>>Explore page</option>
+            <option value="shorts" <?= $initialPlacement === 'shorts' ? 'selected' : '' ?>>Shorts (vertical video)</option>
           </select>
           <div id="placementHint" style="font-size:11px;color:var(--muted);margin-top:6px">
             Select karo article homepage par dikhega, category page par, dono par, ya Explore stream me.
@@ -316,10 +317,14 @@ if ($post && $post['user_id'] != Auth::id() && !Auth::isManager()) {
             <input type="url" name="source_url" class="form-control" id="sourceUrlInput" placeholder="https://instagram.com/... or https://x.com/..."
                    value="<?= Helper::sanitize($post['source_url'] ?? '') ?>">
           </div>
-          <div class="form-group" style="margin:0">
-            <label>YouTube URL</label>
-            <input type="url" name="video_url" class="form-control" id="videoUrlInput" placeholder="https://youtube.com/watch?v=..."
+          <div class="form-group" style="margin:0 0 10px">
+            <label>Video URL (YouTube / Facebook / Instagram / X)</label>
+            <input type="url" name="video_url" class="form-control" id="videoUrlInput" placeholder="https://youtube.com/watch?v=... or https://facebook.com/...watch"
                    value="<?= Helper::sanitize($post['video_url'] ?? '') ?>">
+          </div>
+          <div class="form-group" style="margin:0">
+            <label>Or upload a video file (MP4 / WebM, max 100MB) — used for Shorts</label>
+            <input type="file" name="video" class="form-control" id="videoFileInput" accept="video/mp4,video/webm,video/quicktime">
           </div>
         </div>
 

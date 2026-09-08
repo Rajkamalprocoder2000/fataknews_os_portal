@@ -1242,6 +1242,65 @@ public static function analyticsHeadHtml(): string {
         return '<a href="' . $safeUrl . '" target="_blank" rel="noreferrer" class="explore-social-fallback"><i class="fa fa-arrow-up-right-from-square"></i><span>Open social post</span></a>';
     }
 
+    /**
+     * Full-bleed player markup for the Shorts feed.
+     * Handles uploaded/direct video files, YouTube, Facebook video,
+     * and Instagram / X / TikTok (via their embed blockquotes).
+     */
+    public static function shortEmbedHtml(?string $videoUrl, ?string $poster = null): string {
+        $videoUrl = trim((string)$videoUrl);
+        $posterAttr = $poster ? ' poster="' . self::sanitize($poster) . '"' : '';
+
+        if ($videoUrl === '') {
+            return $poster
+                ? '<img class="m-short-media" src="' . self::sanitize($poster) . '" alt="" loading="lazy">'
+                : '<div class="m-short-media m-short-empty"></div>';
+        }
+
+        $host = strtolower((string)(parse_url($videoUrl, PHP_URL_HOST) ?? ''));
+        $path = strtolower((string)(parse_url($videoUrl, PHP_URL_PATH) ?? ''));
+        $isFile = $host === '' || preg_match('/\.(mp4|webm|ogg|mov|m4v)$/', $path) || str_contains($path, '/uploads/');
+
+        if ($isFile) {
+            $src = $host === '' ? self::publicUrl(ltrim($videoUrl, '/')) : $videoUrl;
+            if (!self::isSafeHtmlUrl($src)) {
+                return '<div class="m-short-media m-short-empty"></div>';
+            }
+            return '<video class="m-short-media" src="' . self::sanitize($src) . '"' . $posterAttr
+                . ' autoplay muted loop playsinline preload="metadata"></video>';
+        }
+
+        $yt = self::youtubeEmbedUrl($videoUrl);
+        if ($yt !== null) {
+            $ytId = '';
+            if (preg_match('#/embed/([A-Za-z0-9_-]{6,})#', $yt, $m)) { $ytId = $m[1]; }
+            $sep = str_contains($yt, '?') ? '&' : '?';
+            $src = $yt . $sep . 'autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&playsinline=1&rel=0'
+                 . ($ytId !== '' ? '&playlist=' . $ytId : '');
+            return '<iframe class="m-short-media" src="' . self::sanitize($src) . '" title="Short video"'
+                 . ' allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen'
+                 . ' referrerpolicy="strict-origin-when-cross-origin" loading="lazy"></iframe>';
+        }
+
+        if (str_contains($host, 'facebook.com') || str_contains($host, 'fb.watch')) {
+            $src = 'https://www.facebook.com/plugins/video.php?href=' . rawurlencode($videoUrl)
+                 . '&show_text=false&autoplay=true&mute=1';
+            return '<iframe class="m-short-media" src="' . self::sanitize($src) . '" title="Short video"'
+                 . ' allow="autoplay; encrypted-media" allowfullscreen'
+                 . ' referrerpolicy="strict-origin-when-cross-origin" loading="lazy"></iframe>';
+        }
+
+        $social = self::socialEmbedHtml($videoUrl);
+        if ($social !== '' && !str_contains($social, 'explore-social-fallback')) {
+            return '<div class="m-short-media m-short-social">' . $social . '</div>';
+        }
+
+        $link = self::sanitize($videoUrl);
+        return '<a class="m-short-media m-short-link" href="' . $link . '" target="_blank" rel="noopener noreferrer">'
+             . ($poster ? '<img src="' . self::sanitize($poster) . '" alt="">' : '')
+             . '<span class="m-short-play"><i data-lucide="play"></i></span></a>';
+    }
+
     public static function isAjax(): bool {
         return isset($_SERVER['HTTP_X_REQUESTED_WITH'])
             && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
@@ -1271,7 +1330,7 @@ public static function analyticsHeadHtml(): string {
             "font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com",
             "script-src 'self' 'unsafe-inline' https://platform.twitter.com https://www.instagram.com https://www.tiktok.com",
             "connect-src 'self' https://accounts.google.com https://oauth2.googleapis.com https://openidconnect.googleapis.com https://api.x.ai https://api.groq.com",
-            "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://platform.twitter.com https://www.instagram.com https://www.tiktok.com",
+            "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://platform.twitter.com https://twitter.com https://www.instagram.com https://www.tiktok.com https://www.facebook.com https://web.facebook.com",
             "form-action 'self' https://accounts.google.com",
             "manifest-src 'self'",
             "media-src 'self' https: data: blob:",

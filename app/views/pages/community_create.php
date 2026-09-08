@@ -60,6 +60,15 @@ include VIEW . 'layouts/header.php';
               <input class="form-control community-create-alt" type="text" name="image_alt" placeholder="Image alt text (optional)" maxlength="255">
             </div>
 
+            <div class="create-widget">
+              <label>Video (optional)</label>
+              <input class="form-control" type="url" name="video_url" placeholder="YouTube / Facebook / Instagram / X video link">
+              <input class="form-control" style="margin-top:8px" type="file" name="video" accept="video/mp4,video/webm,video/quicktime">
+              <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-top:10px;font-weight:500">
+                <input type="checkbox" name="location" value="shorts" style="accent-color:var(--red)"> Post this as a Short (vertical video)
+              </label>
+            </div>
+
             <div class="community-create-actions">
               <button class="btn-write" type="submit" name="status" value="published" id="communitySubmitPublish"><i class="fa fa-paper-plane"></i> Submit for review</button>
               <button class="btn-ghost" type="submit" name="status" value="draft" id="communitySubmitDraft">Save draft</button>
